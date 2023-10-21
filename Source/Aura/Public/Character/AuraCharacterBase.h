@@ -19,6 +19,8 @@ protected:
 
 	virtual void BeginPlay() override;
 
-
+	//TObjectPtr is like a normal pointer but allows for access tracking (how many times its accessed/referenced) lazy loading
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TObjectPtr<USkeletalMeshComponent> Weapon;
 
 };
