@@ -28,4 +28,5 @@ protected:
 private:
 
 	void InitAbilityActorInfo();
+
 };
