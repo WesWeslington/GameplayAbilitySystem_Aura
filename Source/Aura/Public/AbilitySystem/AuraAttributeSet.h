@@ -14,6 +14,46 @@
 /**
  * 
  */
+
+struct FGameplayEffectContextHandle;
+class AActor;
+class AController;
+class ACharacter;
+
+USTRUCT()
+struct FEffectProperties
+{
+	GENERATED_BODY()
+
+	FGameplayEffectContextHandle EffectContextHandle;
+
+	UPROPERTY()
+	UAbilitySystemComponent* SourceAbilitySystemComponent = nullptr;
+
+	UPROPERTY()
+	AActor* SourceAvatarActor = nullptr;
+
+	UPROPERTY()
+	AController* SourceController = nullptr;
+
+	UPROPERTY()
+	ACharacter* SourceCharacter = nullptr;
+
+	//Target 
+
+	UPROPERTY()
+		UAbilitySystemComponent* TargetAbilitySystemComponent = nullptr;
+
+	UPROPERTY()
+		AActor* TargetAvatarActor = nullptr;
+
+	UPROPERTY()
+		AController* TargetController = nullptr;
+
+	UPROPERTY()
+		ACharacter* TargetCharacter = nullptr;
+
+};
 UCLASS()
 class AURA_API UAuraAttributeSet : public UAttributeSet
 {
@@ -25,6 +65,8 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;	//Override for clamping
+	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override; //More important override for clamping
 	/* Attributes */
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Stattributes")
@@ -57,6 +99,10 @@ public:
 	
 	/* Attributes */
 
+
 protected:
 
+private:
+
+	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 };
